@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#1e1b4b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Vault" />
+  <title>🔐 Şifre Vault</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+      display: flex; flex-direction: column; align-items: center;
+      color: #1e1b4b;
+    }
+    .card {
+      background: #fff; border-radius: 20px; padding: 36px 28px;
+      width: min(92vw, 380px); margin-top: 60px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    .logo { font-size: 48px; text-align: center; margin-bottom: 8px; }
+    h2 { text-align: center; margin-bottom: 4px; font-size: 22px; color: #312e81; }
+    .sub { text-align: center; font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 4px; }
+    input[type=text], input[type=password] {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 2px solid #e5e7eb; font-size: 15px; outline: none;
+      font-family: monospace; transition: border .2s;
+    }
+    input[type=text]:focus, input[type=password]:focus { border-color: #6366f1; }
+    .field { margin-bottom: 12px; }
+    .btn-primary {
+      width: 100%; padding: 12px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #6366f1, #4338ca); color: #fff;
+      font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px;
+    }
+    .err { color: #ef4444; font-size: 13px; margin: 6px 0; }
+    .vault-header {
+      width: 100%; max-width: 480px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px 0;
+    }
+    .vault-title { font-size: 22px; font-weight: 800; color: #fff; }
+    .lock-btn {
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+      color: #fff; border-radius: 20px; padding: 6px 16px;
+      cursor: pointer; font-size: 13px;
+    }
+    .vault-body { width: 100%; max-width: 480px; padding: 16px 16px 90px; }
+    .banner { border-radius: 12px; border: 1px solid; padding: 10px 14px; margin-bottom: 12px; font-size: 13px; }
+    .banner-red { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
+    .banner-yellow { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+    .empty { text-align: center; color: rgba(255,255,255,.6); margin-top: 60px; line-height: 1.8; }
+    .entry {
