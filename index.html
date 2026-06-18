@@ -29,7 +29,7 @@
     .empty{text-align:center;color:rgba(255,255,255,.6);margin-top:40px;line-height:1.8}
     .entry{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 4px 20px rgba(0,0,0,.2);border-left:4px solid #6366f1}
     .entry-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-    .entry-label{font-weight:700;font-size:16px;color:#1e1b4b;display:flex;align-items:center;gap:6px}
+    .entry-label{font-weight:700;font-size:16px;color:#1e1b4b;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
     .cat-tag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
     .cat-bank{background:#dbeafe;color:#1d4ed8}
     .cat-mail{background:#f3e8ff;color:#7e22ce}
@@ -60,15 +60,24 @@
     .len-group{display:flex;gap:8px;margin-bottom:14px}
     .len-btn{flex:1;padding:8px 0;border-radius:10px;border:2px solid #e5e7eb;background:#f9fafb;color:#374151;font-weight:600;cursor:pointer;font-size:14px}
     .len-btn.active{border-color:#6366f1;background:#eef2ff;color:#4338ca}
-    input[type=range]{width:100%;margin-bottom:12px}
+    input[type=range]{width:100%;margin-bottom:4px}
+    .slider-labels{display:flex;justify-content:space-between;font-size:11px;color:#9ca3af;margin-bottom:10px}
     .prev-box{display:flex;align-items:center;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;margin-bottom:6px;gap:8px}
     .prev-pwd{flex:1;font-family:monospace;font-size:13px;color:#166534;word-break:break-all}
     .ref-btn{background:none;border:none;cursor:pointer;font-size:20px}
     .btn-row{display:flex;gap:8px}
     .btn-cancel{flex:1;padding:12px;border-radius:12px;border:2px solid #e5e7eb;background:#fff;color:#374151;font-size:15px;font-weight:600;cursor:pointer}
+    .toggle-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;cursor:pointer}
+    .toggle-box{width:42px;height:24px;border-radius:99px;background:#e5e7eb;position:relative;transition:background .2s;flex-shrink:0}
+    .toggle-box.on{background:#6366f1}
+    .toggle-knob{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+    .toggle-box.on .toggle-knob{left:21px}
+    .toggle-lbl{font-size:13px;font-weight:600;color:#374151}
+    .custom-pool-box{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:10px;padding:10px 12px;margin-bottom:10px}
+    .custom-pool-box label{color:#92400e;margin-bottom:6px}
+    .custom-pool-box input{border-color:#fcd34d;background:#fff}
+    .custom-pool-box .hint{font-size:11px;color:#92400e;margin-top:4px}
     .fab{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;border:none;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:32px;cursor:pointer;box-shadow:0 6px 24px rgba(249,115,22,.5);display:flex;align-items:center;justify-content:center;z-index:100}
-    .rule-list{font-size:11px;color:#6b7280;margin-bottom:10px;padding:0 2px}
-    .rule-list span{display:inline-block;margin-right:8px}
   </style>
 </head>
 <body>
@@ -101,8 +110,10 @@
     <div id="b-soon" class="banner by hidden"></div>
     <div id="empty" class="empty">Henüz şifre yok.<br/>＋ butonuna basarak ekleyin.</div>
     <div id="list"></div>
+
     <div id="add-form" class="add-form hidden">
       <h3>Yeni Şifre Ekle</h3>
+
       <label style="margin-bottom:8px">Kategori</label>
       <div class="seg-group" id="seg">
         <button class="seg-btn active" data-cat="banka"><span class="seg-icon">🏦</span>Banka</button>
@@ -110,7 +121,12 @@
         <button class="seg-btn" data-cat="ozel"><span class="seg-icon">🔑</span>Özel</button>
       </div>
       <div class="cat-hint" id="cat-hint"></div>
-      <div class="field"><label>Etiket</label><input type="text" id="f-label" placeholder="örn: İş Bankası"/></div>
+
+      <div class="field">
+        <label id="lbl-etiket">Etiket</label>
+        <input type="text" id="f-label" placeholder="örn: İş Bankası"/>
+      </div>
+
       <label>Periyot</label>
       <div class="period-group" id="pg">
         <button class="p-btn" data-m="3">3A</button>
@@ -118,17 +134,30 @@
         <button class="p-btn" data-m="9">9A</button>
         <button class="p-btn" data-m="12">12A</button>
       </div>
-      <label id="len-label">Uzunluk</label>
-      <div class="len-group hidden" id="bank-len">
+
+      <label>Uzunluk</label>
+      <div class="len-group" id="bank-len">
         <button class="len-btn active" data-l="6">6</button>
         <button class="len-btn" data-l="8">8</button>
         <button class="len-btn" data-l="10">10</button>
         <button class="len-btn" data-l="12">12</button>
       </div>
-      <div id="slider-wrap">
+      <div id="slider-wrap" class="hidden">
         <input type="range" id="f-len" min="8" max="32" value="16"/>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:#9ca3af;margin-top:-8px;margin-bottom:8px"><span>8</span><span id="len-v">16</span><span>32</span></div>
+        <div class="slider-labels"><span>8</span><span id="len-v">16</span><span>32</span></div>
       </div>
+
+      <!-- Kendi karakterlerin -->
+      <div class="toggle-row" id="custom-toggle">
+        <div class="toggle-box" id="tog-box"><div class="toggle-knob"></div></div>
+        <span class="toggle-lbl" id="tog-lbl">Kendi karakterlerimi kullan</span>
+      </div>
+      <div class="custom-pool-box hidden" id="custom-pool-box">
+        <label id="pool-label">Karakterlerini gir</label>
+        <input type="text" id="f-pool" placeholder="örn: 1947 veya Abc!23"/>
+        <div class="hint" id="pool-hint"></div>
+      </div>
+
       <div class="prev-box"><span class="prev-pwd" id="prev-pwd">—</span><button class="ref-btn" id="ref-btn">🔁</button></div>
       <div class="str-bar"><div class="str-fill" id="f-str-fill"></div></div>
       <div class="str-lbl" id="f-str-lbl"></div>
@@ -150,42 +179,50 @@ async function dec(b64,p){const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0)),
 const N="0123456789",SP="!@#$%^&*()-_=+[]{}|;:,.<>?",U="ABCDEFGHIJKLMNOPQRSTUVWXYZ",L="abcdefghijklmnopqrstuvwxyz";
 
 const CAT={
-  banka:{
-    hint:"🏦 Sadece rakam • Banka PIN ve internet şifreleri için",
-    tag:"🏦 Banka", cls:"cat-bank",
-    rules:"✔ Sadece rakam"
-  },
-  mail:{
-    hint:"📧 Büyük + küçük harf • Rakam • Özel karakter — Mail & sosyal medya için",
-    tag:"📧 Mail", cls:"cat-mail",
-    rules:"✔ En az 1 büyük harf  ✔ En az 1 küçük harf  ✔ En az 1 rakam  ✔ En az 1 özel karakter"
-  },
-  ozel:{
-    hint:"🔑 Büyük harf • Rakam • Özel karakter — Genel şifreler için",
-    tag:"🔑 Özel", cls:"cat-ozel",
-    rules:"✔ En az 1 büyük harf  ✔ En az 1 rakam  ✔ En az 1 özel karakter"
-  }
+  banka:{hint:"🏦 Sadece rakam • Banka PIN ve şifreleri için",tag:"🏦 Banka",cls:"cat-bank",
+    ph:"örn: İş Bankası",poolLbl:"Kullanmak istediğin rakamları gir",
+    poolHint:"Bu rakamlar karıştırılarak şifren oluşturulur. örn: 1947 63 28"},
+  mail:{hint:"📧 Büyük+küçük harf • Rakam • Özel karakter — Mail & sosyal medya",tag:"📧 Mail",cls:"cat-mail",
+    ph:"örn: Gmail",poolLbl:"Kullanmak istediğin karakterleri gir",
+    poolHint:"Harf, rakam ve özel karakter karıştırılabilir. örn: Mrt!94 veya Ab12#x"},
+  ozel:{hint:"🔑 Büyük harf • Rakam • Özel karakter — Genel şifreler için",tag:"🔑 Özel",cls:"cat-ozel",
+    ph:"örn: Netflix",poolLbl:"Kullanmak istediğin karakterleri gir",
+    poolHint:"Büyük harf, rakam ve özel karakter kullanılabilir. örn: A7!B3*"}
 };
 
-function gen(n,cat){
+function shuffle(arr,rnd){for(let i=arr.length-1;i>0;i--){const j=rnd[i]%(i+1);[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+function genFromPool(n,pool){
   const a=new Uint8Array(n*4);crypto.getRandomValues(a);
-  let p="";
-  if(cat==="banka"){
-    for(let i=0;i<n;i++)p+=N[a[i]%N.length];
-    return p;
+  const chars=[];for(let i=0;i<n;i++)chars.push(pool[a[i]%pool.length]);
+  return shuffle(chars,a.slice(n)).join("");
+}
+
+function gen(n,cat,customPool){
+  const a=new Uint8Array(n*4);crypto.getRandomValues(a);
+  // Özel havuz aktifse
+  if(customPool&&customPool.length>=2){
+    const pool=[...new Set(customPool.split(""))]; // tekrarları kaldır
+    if(cat==="banka"){
+      // sadece rakamları al
+      const nums=pool.filter(c=>N.includes(c));
+      if(nums.length>=1)return genFromPool(n,nums);
+    } else {
+      return genFromPool(n,pool);
+    }
   }
+  // Standart üretim
+  let p="";
+  if(cat==="banka"){const pool=N;for(let i=0;i<n;i++)p+=pool[a[i]%pool.length];return p;}
   if(cat==="mail"){
     p+=U[a[0]%U.length]+L[a[1]%L.length]+N[a[2]%N.length]+SP[a[3]%SP.length];
-    const pool=U+L+N+SP;
-    for(let i=4;i<n;i++)p+=pool[a[i]%pool.length];
+    const pool=U+L+N+SP;for(let i=4;i<n;i++)p+=pool[a[i]%pool.length];
   }
   if(cat==="ozel"){
     p+=U[a[0]%U.length]+N[a[1]%N.length]+SP[a[2]%SP.length];
-    const pool=U+N+SP;
-    for(let i=3;i<n;i++)p+=pool[a[i]%pool.length];
+    const pool=U+N+SP;for(let i=3;i<n;i++)p+=pool[a[i]%pool.length];
   }
-  const c=p.split("");
-  for(let i=c.length-1;i>0;i--){const j=a[i+n]%(i+1);[c[i],c[j]]=[c[j],c[i]];}
+  const c=p.split("");for(let i=c.length-1;i>0;i--){const j=a[i+n]%(i+1);[c[i],c[j]]=[c[j],c[i]];}
   return c.join("");
 }
 
@@ -201,16 +238,22 @@ function am(d,m){const x=new Date(d);x.setMonth(x.getMonth()+m);return x;}
 function dl(e){return Math.ceil((new Date(e)-Date.now())/86400000);}
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
-const SK="pm_v2",MK="pm_m1";
-let mp="",es=[],prev="",per=6,cat="banka",bankLen=6,sliderLen=16;
+const SK="pm_v3",MK="pm_m1";
+let mp="",es=[],prev="",per=6,cat="banka",bankLen=6,sliderLen=16,useCustom=false;
 
-function show(id){["s-setup","s-unlock","s-vault"].forEach(x=>{document.getElementById(x).classList.toggle("hidden",x!==id);});}
+function show(id){["s-setup","s-unlock","s-vault"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id));}
 function se(id,m){const e=document.getElementById(id);e.textContent=m;e.classList.remove("hidden");}
 function ce(id){document.getElementById(id).classList.add("hidden");}
 async function sv(d,p){localStorage.setItem(SK,await enc(JSON.stringify(d),p));}
 
+function getCustomPool(){return useCustom?document.getElementById("f-pool").value:"";}
+
 function updateCatUI(){
-  document.getElementById("cat-hint").textContent=CAT[cat].hint;
+  const cfg=CAT[cat];
+  document.getElementById("cat-hint").textContent=cfg.hint;
+  document.getElementById("f-label").placeholder=cfg.ph;
+  document.getElementById("pool-label").textContent=cfg.poolLbl;
+  document.getElementById("pool-hint").textContent=cfg.poolHint;
   const isBanka=cat==="banka";
   document.getElementById("bank-len").classList.toggle("hidden",!isBanka);
   document.getElementById("slider-wrap").classList.toggle("hidden",isBanka);
@@ -219,12 +262,26 @@ function updateCatUI(){
 
 function rp(){
   const n=cat==="banka"?bankLen:sliderLen;
-  prev=gen(n,cat);
+  const pool=getCustomPool();
+  prev=gen(n,cat,pool);
   const el=document.getElementById("prev-pwd");if(el)el.textContent=prev;
   const st=str(prev),fi=document.getElementById("f-str-fill"),lb=document.getElementById("f-str-lbl");
   if(fi){fi.style.width=`${(st.s/4)*100}%`;fi.style.background=st.c;}
-  if(lb){lb.textContent=CAT[cat].rules;lb.style.color="#6b7280";}
+  if(lb){
+    const rules=cat==="banka"?"✔ Sadece rakam":cat==="mail"?"✔ Büyük  ✔ Küçük  ✔ Rakam  ✔ Özel karakter":"✔ Büyük harf  ✔ Rakam  ✔ Özel karakter";
+    lb.textContent=rules;lb.style.color="#6b7280";
+  }
 }
+
+// Toggle
+document.getElementById("custom-toggle").onclick=()=>{
+  useCustom=!useCustom;
+  document.getElementById("tog-box").classList.toggle("on",useCustom);
+  document.getElementById("custom-pool-box").classList.toggle("hidden",!useCustom);
+  if(!useCustom)document.getElementById("f-pool").value="";
+  rp();
+};
+document.getElementById("f-pool").oninput=rp;
 
 function render(){
   const bx=document.getElementById("b-exp"),bs=document.getElementById("b-soon"),em=document.getElementById("empty"),li=document.getElementById("list");
@@ -235,13 +292,13 @@ function render(){
   li.innerHTML="";
   es.forEach(e=>{
     const d=dl(e.exp),ie=d<=0,is=d>0&&d<=14,st=str(e.pwd);
+    const cfg=CAT[e.cat]||CAT.ozel;
     const card=document.createElement("div");
     card.className="entry";
     card.style.borderLeftColor=ie?"#ef4444":is?"#f97316":"#6366f1";
-    const cfg=CAT[e.cat]||CAT.ozel;
     card.innerHTML=`
       <div class="entry-top">
-        <span class="entry-label">${esc(e.lbl)} <span class="cat-tag ${cfg.cls}">${cfg.tag}</span></span>
+        <span class="entry-label">${esc(e.lbl)}<span class="cat-tag ${cfg.cls}">${cfg.tag}</span></span>
         <span class="badge ${ie?"b-red":is?"b-ora":"b-grn"}">${ie?"Doldu":d+" gün"}</span>
       </div>
       <div class="pwd-row">
@@ -266,13 +323,14 @@ function render(){
       navigator.clipboard.writeText(e.pwd).catch(()=>{});
       const b=card.querySelector(".cb");b.textContent="✅";setTimeout(()=>b.textContent="📋",1800);
     };
-    card.querySelector(".act-btn").onclick=async()=>{
+    const btns=card.querySelectorAll(".act-btn");
+    btns[0].onclick=async()=>{
       const now=new Date();
-      const newPwd=gen(e.pwd.length,e.cat);
+      const newPwd=gen(e.pwd.length,e.cat,e.customPool||"");
       es=es.map(x=>x.id!==e.id?x:{...x,pwd:newPwd,cAt:now.toISOString(),exp:am(now,x.per).toISOString()});
       await sv(es,mp);render();
     };
-    card.querySelectorAll(".act-btn")[1].onclick=async()=>{
+    btns[1].onclick=async()=>{
       if(!confirm("Silinsin mi?"))return;
       es=es.filter(x=>x.id!==e.id);await sv(es,mp);render();
     };
@@ -311,6 +369,13 @@ document.getElementById("lock-btn").onclick=()=>{mp="";es=[];show("s-unlock");};
 document.getElementById("fab").onclick=()=>{
   document.getElementById("add-form").classList.remove("hidden");
   document.getElementById("fab").classList.add("hidden");
+  useCustom=false;
+  document.getElementById("tog-box").classList.remove("on");
+  document.getElementById("custom-pool-box").classList.add("hidden");
+  document.getElementById("f-pool").value="";
+  cat="banka";
+  document.querySelectorAll(".seg-btn").forEach(x=>x.classList.remove("active"));
+  document.querySelector('[data-cat="banka"]').classList.add("active");
   updateCatUI();
 };
 document.getElementById("cancel-btn").onclick=()=>{
@@ -348,10 +413,14 @@ document.getElementById("save-btn").onclick=async()=>{
   ce("f-err");
   const lbl=document.getElementById("f-label").value.trim();
   if(!lbl)return se("f-err","Etiket girin.");
+  const customPool=getCustomPool();
+  if(useCustom&&customPool.length<2)return se("f-err","En az 2 karakter girin.");
+  if(useCustom&&cat==="banka"&&![...customPool].some(c=>N.includes(c)))
+    return se("f-err","Banka için en az 1 rakam girmelisiniz.");
   const n=cat==="banka"?bankLen:sliderLen;
-  const pwd=prev||gen(n,cat);
+  const pwd=prev||gen(n,cat,customPool);
   const now=new Date();
-  es.push({id:crypto.randomUUID(),lbl,pwd,cat,per,cAt:now.toISOString(),exp:am(now,per).toISOString()});
+  es.push({id:crypto.randomUUID(),lbl,pwd,cat,per,customPool,cAt:now.toISOString(),exp:am(now,per).toISOString()});
   await sv(es,mp);render();
   document.getElementById("add-form").classList.add("hidden");
   document.getElementById("fab").classList.remove("hidden");
