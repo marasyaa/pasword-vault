@@ -2,58 +2,195 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <meta name="theme-color" content="#1e1b4b" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Vault" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🔐 Şifre Vault</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
-      display: flex; flex-direction: column; align-items: center;
-      color: #1e1b4b;
-    }
-    .card {
-      background: #fff; border-radius: 20px; padding: 36px 28px;
-      width: min(92vw, 380px); margin-top: 60px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
-    }
-    .logo { font-size: 48px; text-align: center; margin-bottom: 8px; }
-    h2 { text-align: center; margin-bottom: 4px; font-size: 22px; color: #312e81; }
-    .sub { text-align: center; font-size: 13px; color: #6b7280; margin-bottom: 20px; }
-    label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 4px; }
-    input[type=text], input[type=password] {
-      width: 100%; padding: 10px 12px; border-radius: 10px;
-      border: 2px solid #e5e7eb; font-size: 15px; outline: none;
-      font-family: monospace; transition: border .2s;
-    }
-    input[type=text]:focus, input[type=password]:focus { border-color: #6366f1; }
-    .field { margin-bottom: 12px; }
-    .btn-primary {
-      width: 100%; padding: 12px; border-radius: 12px; border: none;
-      background: linear-gradient(135deg, #6366f1, #4338ca); color: #fff;
-      font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px;
-    }
-    .err { color: #ef4444; font-size: 13px; margin: 6px 0; }
-    .vault-header {
-      width: 100%; max-width: 480px;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 20px 0;
-    }
-    .vault-title { font-size: 22px; font-weight: 800; color: #fff; }
-    .lock-btn {
-      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
-      color: #fff; border-radius: 20px; padding: 6px 16px;
-      cursor: pointer; font-size: 13px;
-    }
-    .vault-body { width: 100%; max-width: 480px; padding: 16px 16px 90px; }
-    .banner { border-radius: 12px; border: 1px solid; padding: 10px 14px; margin-bottom: 12px; font-size: 13px; }
-    .banner-red { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
-    .banner-yellow { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-    .empty { text-align: center; color: rgba(255,255,255,.6); margin-top: 60px; line-height: 1.8; }
-    .entry {
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,sans-serif;padding:16px}
+    .card{background:#fff;border-radius:20px;padding:32px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .logo{font-size:48px;text-align:center;margin-bottom:8px}
+    h2{text-align:center;margin-bottom:4px;font-size:22px;color:#312e81}
+    .sub{text-align:center;font-size:13px;color:#6b7280;margin-bottom:20px}
+    .field{margin-bottom:12px}
+    label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
+    input[type=text],input[type=password]{width:100%;padding:10px 12px;border-radius:10px;border:2px solid #e5e7eb;font-size:15px;outline:none;font-family:monospace}
+    input:focus{border-color:#6366f1}
+    .btn{width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#6366f1,#4338ca);color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}
+    .err{color:#ef4444;font-size:13px;margin:6px 0}
+    .hidden{display:none!important}
+    /* vault */
+    .vault-wrap{width:100%;max-width:480px;display:flex;flex-direction:column}
+    .vault-header{display:flex;align-items:center;justify-content:space-between;padding:16px 4px 8px}
+    .vault-title{font-size:22px;font-weight:800;color:#fff}
+    .lock-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:20px;padding:6px 16px;cursor:pointer;font-size:13px}
+    .vault-body{padding-bottom:80px}
+    .banner{border-radius:12px;border:1px solid;padding:10px 14px;margin-bottom:10px;font-size:13px}
+    .br{background:#fef2f2;border-color:#fca5a5;color:#dc2626}
+    .by{background:#fffbeb;border-color:#fcd34d;color:#92400e}
+    .empty{text-align:center;color:rgba(255,255,255,.6);margin-top:40px;line-height:1.8}
+    .entry{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 4px 20px rgba(0,0,0,.2);border-left:4px solid #6366f1}
+    .entry-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .entry-label{font-weight:700;font-size:16px;color:#1e1b4b}
+    .badge{border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600}
+    .b-red{background:#fee2e2;color:#dc2626}
+    .b-ora{background:#fff7ed;color:#c2410c}
+    .b-grn{background:#f0fdf4;color:#15803d}
+    .pwd-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+    .pwd-text{flex:1;font-family:monospace;font-size:14px;color:#374151;word-break:break-all}
+    .icon-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:2px}
+    .str-bar{height:5px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-bottom:4px}
+    .str-fill{height:100%;border-radius:99px;transition:width .4s}
+    .str-lbl{font-size:11px;margin-bottom:6px}
+    .entry-meta{display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-bottom:8px}
+    .entry-actions{display:flex;gap:8px}
+    .act-btn{flex:1;padding:8px 0;border-radius:10px;border:none;color:#fff;font-weight:600;cursor:pointer;font-size:13px}
+    .add-form{background:#fff;border-radius:16px;padding:20px 18px;margin-top:8px;box-shadow:0 4px 24px rgba(0,0,0,.2)}
+    .add-form h3{margin-bottom:12px;color:#312e81}
+    .period-group{display:flex;gap:8px;margin-bottom:12px}
+    .p-btn{flex:1;padding:8px 0;border-radius:10px;border:2px solid #e5e7eb;background:#f9fafb;color:#374151;font-weight:600;cursor:pointer;font-size:14px}
+    .p-btn.active{border-color:#6366f1;background:#eef2ff;color:#4338ca}
+    input[type=range]{width:100%;margin-bottom:12px}
+    .cb-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;font-weight:600;color:#374151}
+    .prev-box{display:flex;align-items:center;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;margin-bottom:6px;gap:8px}
+    .prev-pwd{flex:1;font-family:monospace;font-size:13px;color:#166534;word-break:break-all}
+    .ref-btn{background:none;border:none;cursor:pointer;font-size:20px}
+    .btn-row{display:flex;gap:8px}
+    .btn-cancel{flex:1;padding:12px;border-radius:12px;border:2px solid #e5e7eb;background:#fff;color:#374151;font-size:15px;font-weight:600;cursor:pointer}
+    .fab{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;border:none;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:32px;cursor:pointer;box-shadow:0 6px 24px rgba(249,115,22,.5);display:flex;align-items:center;justify-content:center;z-index:100}
+  </style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="s-setup" class="card">
+  <div class="logo">🔐</div>
+  <h2>Vault Kur</h2>
+  <p class="sub">Ana şifrenizi belirleyin. Kaybolursa veriler kurtarılamaz.</p>
+  <div class="field"><label>Ana Şifre</label><input type="password" id="setup-pwd" placeholder="En az 8 karakter"/></div>
+  <div class="field"><label>Tekrar Girin</label><input type="password" id="setup-con" placeholder="Tekrar girin"/></div>
+  <p class="err hidden" id="setup-err"></p>
+  <button class="btn" id="setup-btn">Vault Oluştur</button>
+</div>
+
+<!-- UNLOCK -->
+<div id="s-unlock" class="card hidden">
+  <div class="logo">🔐</div>
+  <h2>Vault Aç</h2>
+  <div class="field"><label>Ana Şifre</label><input type="password" id="unlock-pwd" placeholder="Ana şifrenizi girin"/></div>
+  <p class="err hidden" id="unlock-err"></p>
+  <button class="btn" id="unlock-btn">Aç</button>
+</div>
+
+<!-- VAULT -->
+<div id="s-vault" class="vault-wrap hidden">
+  <div class="vault-header">
+    <span class="vault-title">🔐 Vault</span>
+    <button class="lock-btn" id="lock-btn">Kilitle</button>
+  </div>
+  <div class="vault-body">
+    <div id="b-exp" class="banner br hidden"></div>
+    <div id="b-soon" class="banner by hidden"></div>
+    <div id="empty" class="empty">Henüz şifre yok.<br/>＋ butonuna basarak ekleyin.</div>
+    <div id="list"></div>
+    <div id="add-form" class="add-form hidden">
+      <h3>Yeni Şifre Ekle</h3>
+      <div class="field"><label>Etiket</label><input type="text" id="f-label" placeholder="örn: Gmail"/></div>
+      <label>Periyot</label>
+      <div class="period-group" id="pg">
+        <button class="p-btn" data-m="3">3A</button>
+        <button class="p-btn active" data-m="6">6A</button>
+        <button class="p-btn" data-m="9">9A</button>
+        <button class="p-btn" data-m="12">12A</button>
+      </div>
+      <label>Uzunluk: <span id="len-v">20</span></label>
+      <input type="range" id="f-len" min="12" max="32" value="20"/>
+      <label class="cb-row"><input type="checkbox" id="f-let" checked/> Harf ekle</label>
+      <div class="prev-box"><span class="prev-pwd" id="prev-pwd">—</span><button class="ref-btn" id="ref-btn">🔁</button></div>
+      <div class="str-bar"><div class="str-fill" id="f-str-fill"></div></div>
+      <div class="str-lbl" id="f-str-lbl"></div>
+      <p class="err hidden" id="f-err"></p>
+      <div class="btn-row">
+        <button class="btn" id="save-btn" style="margin-top:0">Kaydet</button>
+        <button class="btn-cancel" id="cancel-btn">İptal</button>
+      </div>
+    </div>
+  </div>
+  <button class="fab" id="fab">＋</button>
+</div>
+
+<script>
+async function dk(p,s){const e=new TextEncoder(),km=await crypto.subtle.importKey("raw",e.encode(p),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt:s,iterations:200000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);}
+async function enc(t,p){const s=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),k=await dk(p,s),ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},k,new TextEncoder().encode(t)),b=new Uint8Array([...s,...iv,...new Uint8Array(ct)]);return btoa(String.fromCharCode(...b));}
+async function dec(b64,p){const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0)),k=await dk(p,b.slice(0,16)),pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b.slice(16,28)},k,b.slice(28));return new TextDecoder().decode(pt);}
+const N="0123456789",SP="!@#$%^&*()-_=+[]{}|;:,.<>?",U="ABCDEFGHIJKLMNOPQRSTUVWXYZ",L="abcdefghijklmnopqrstuvwxyz";
+function gen(n=20,l=true){const pool=N+SP+(l?U+L:""),a=new Uint8Array(n*2);crypto.getRandomValues(a);let p=N[a[0]%N.length]+SP[a[1]%SP.length];if(l)p+=U[a[2]%U.length]+L[a[3]%L.length];for(let i=p.length;i<n;i++)p+=pool[a[i]%pool.length];const c=p.split("");for(let i=c.length-1;i>0;i--){const j=a[i+n]%(i+1);[c[i],c[j]]=[c[j],c[i]];}return c.join("");}
+function str(p){let s=0;if(p.length>=12)s++;if(p.length>=18)s++;if(/\d/.test(p))s++;if(/[^a-zA-Z0-9]/.test(p))s++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;return{s,l:["Çok Zayıf","Zayıf","Orta","Güçlü","Çok Güçlü"][s]??"Çok Güçlü",c:["#ef4444","#f97316","#eab308","#22c55e","#10b981"][s]??"#10b981"};}
+function am(d,m){const x=new Date(d);x.setMonth(x.getMonth()+m);return x;}
+function dl(e){return Math.ceil((new Date(e)-Date.now())/86400000);}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+const SK="pm_v1",MK="pm_m1";
+let mp="",es=[],prev="",per=6;
+function show(id){["s-setup","s-unlock","s-vault"].forEach(x=>{const el=document.getElementById(x);el.classList.toggle("hidden",x!==id);});}
+function se(id,m){const e=document.getElementById(id);e.textContent=m;e.classList.remove("hidden");}
+function ce(id){document.getElementById(id).classList.add("hidden");}
+async function sv(d,p){localStorage.setItem(SK,await enc(JSON.stringify(d),p));}
+function render(){
+  const bx=document.getElementById("b-exp"),bs=document.getElementById("b-soon"),em=document.getElementById("empty"),li=document.getElementById("list");
+  const ex=es.filter(e=>dl(e.exp)<=0),so=es.filter(e=>{const d=dl(e.exp);return d>0&&d<=14;});
+  ex.length?(bx.textContent=`⚠️ ${ex.length} şifrenin süresi doldu!`,bx.classList.remove("hidden")):bx.classList.add("hidden");
+  so.length?(bs.textContent=`⏰ ${so.length} şifre 14 gün içinde dolacak.`,bs.classList.remove("hidden")):bs.classList.add("hidden");
+  em.classList.toggle("hidden",es.length>0);
+  li.innerHTML="";
+  es.forEach(e=>{
+    const d=dl(e.exp),ie=d<=0,is=d>0&&d<=14,st=str(e.pwd);
+    const card=document.createElement("div");
+    card.className="entry";card.style.borderLeftColor=ie?"#ef4444":is?"#f97316":"#6366f1";
+    card.innerHTML=`<div class="entry-top"><span class="entry-label">${esc(e.lbl)}</span><span class="badge ${ie?"b-red":is?"b-ora":"b-grn"}">${ie?"Doldu":d+" gün"}</span></div><div class="pwd-row"><span class="pwd-text" data-show="0">${"•".repeat(Math.min(e.pwd.length,20))}</span><button class="icon-btn tb">👁</button><button class="icon-btn cb">📋</button></div><div class="str-bar"><div class="str-fill" style="width:${(st.s/4)*100}%;background:${st.c}"></div></div><div class="str-lbl" style="color:${st.c}">${st.l}</div><div class="entry-meta"><span>${e.per} ay</span><span>${new Date(e.exp).toLocaleDateString("tr-TR")}</span></div><div class="entry-actions"><button class="act-btn rb" style="background:#6366f1">🔄 Yenile</button><button class="act-btn db" style="background:#ef4444">🗑 Sil</button></div>`;
+    card.querySelector(".tb").onclick=()=>{const sp=card.querySelector(".pwd-text"),sh=sp.dataset.show==="1";sp.textContent=sh?"•".repeat(Math.min(e.pwd.length,20)):e.pwd;sp.dataset.show=sh?"0":"1";card.querySelector(".tb").textContent=sh?"👁":"🙈";};
+    card.querySelector(".cb").onclick=()=>{navigator.clipboard.writeText(e.pwd).catch(()=>{});const b=card.querySelector(".cb");b.textContent="✅";setTimeout(()=>b.textContent="📋",1800);};
+    card.querySelector(".rb").onclick=async()=>{es=es.map(x=>x.id!==e.id?x:{...x,pwd:gen(x.pwd.length,/[a-zA-Z]/.test(x.pwd)),cAt:new Date().toISOString(),exp:am(new Date(),x.per).toISOString()});await sv(es,mp);render();};
+    card.querySelector(".db").onclick=async()=>{if(!confirm("Silinsin mi?"))return;es=es.filter(x=>x.id!==e.id);await sv(es,mp);render();};
+    li.appendChild(card);
+  });
+}
+function rp(){const n=parseInt(document.getElementById("f-len")?.value||20),l=document.getElementById("f-let")?.checked??true;prev=gen(n,l);const el=document.getElementById("prev-pwd");if(el)el.textContent=prev;const st=str(prev),fi=document.getElementById("f-str-fill"),lb=document.getElementById("f-str-lbl");if(fi){fi.style.width=`${(st.s/4)*100}%`;fi.style.background=st.c;}if(lb){lb.textContent=st.l;lb.style.color=st.c;}}
+window.onload=()=>{show(localStorage.getItem(MK)?"s-unlock":"s-setup");rp();};
+document.getElementById("setup-btn").onclick=async()=>{
+  ce("setup-err");const p=document.getElementById("setup-pwd").value,c=document.getElementById("setup-con").value;
+  if(p.length<8)return se("setup-err","En az 8 karakter olmalı.");
+  if(p!==c)return se("setup-err","Şifreler eşleşmiyor.");
+  const btn=document.getElementById("setup-btn");btn.textContent="⏳";btn.disabled=true;
+  localStorage.setItem(MK,await enc("VALID",p));await sv([],p);mp=p;es=[];render();show("s-vault");
+  btn.textContent="Vault Oluştur";btn.disabled=false;
+};
+document.getElementById("unlock-btn").onclick=async()=>{
+  ce("unlock-err");const p=document.getElementById("unlock-pwd").value;
+  const btn=document.getElementById("unlock-btn");btn.textContent="⏳";btn.disabled=true;
+  try{if(await dec(localStorage.getItem(MK),p)!=="VALID")throw 0;}
+  catch{btn.textContent="Aç";btn.disabled=false;return se("unlock-err","Yanlış şifre!");}
+  const raw=localStorage.getItem(SK);
+  try{es=raw?JSON.parse(await dec(raw,p)):[];}catch{es=[];}
+  mp=p;render();show("s-vault");document.getElementById("unlock-pwd").value="";
+  btn.textContent="Aç";btn.disabled=false;
+};
+document.getElementById("lock-btn").onclick=()=>{mp="";es=[];show("s-unlock");};
+document.getElementById("fab").onclick=()=>{document.getElementById("add-form").classList.remove("hidden");document.getElementById("fab").classList.add("hidden");rp();};
+document.getElementById("cancel-btn").onclick=()=>{document.getElementById("add-form").classList.add("hidden");document.getElementById("fab").classList.remove("hidden");ce("f-err");};
+document.getElementById("pg").onclick=e=>{const b=e.target.closest(".p-btn");if(!b)return;document.querySelectorAll(".p-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");per=parseInt(b.dataset.m);};
+document.getElementById("f-len").oninput=e=>{document.getElementById("len-v").textContent=e.target.value;rp();};
+document.getElementById("f-let").onchange=rp;
+document.getElementById("ref-btn").onclick=rp;
+document.getElementById("save-btn").onclick=async()=>{
+  ce("f-err");const lbl=document.getElementById("f-label").value.trim();
+  if(!lbl)return se("f-err","Etiket girin.");
+  const pwd=prev||gen(parseInt(document.getElementById("f-len").value),document.getElementById("f-let").checked);
+  const now=new Date();
+  es.push({id:crypto.randomUUID(),lbl,pwd,per,cAt:now.toISOString(),exp:am(now,per).toISOString()});
+  await sv(es,mp);render();
+  document.getElementById("add-form").classList.add("hidden");
+  document.getElementById("fab").classList.remove("hidden");
+  document.getElementById("f-label").value="";
+};
+</script>
+</body>
+</html>
